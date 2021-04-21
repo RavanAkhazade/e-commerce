@@ -1,0 +1,13 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Listing: {{ lst.title }}</h2><br>
+    {% if lst.image %}
+        <img src="{{ MEDIA_URL }}{{ lst.image }}"/><br>
+    {% endif %}
+    <br><h6>{{ lst.description }}</h6><br>
+    <h3>The ${{ lst.ebid }}.00 bid is the winner bid!</h3>
+    {% if err %}
+        <br>{{ err }}
+    {% endif %}
+{% endblock %}

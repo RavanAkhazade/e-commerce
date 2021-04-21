@@ -1,0 +1,86 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+{% with r=listings.count %}
+<style>
+    .lst_whole {
+        display: grid;
+        grid-gap: 10px;
+    }
+    .lst {
+        display: grid;
+        grid-template-rows: repeat({{r}}, auto);
+        grid-template-columns: 1fr 1fr 1fr;
+        border-style: solid;
+        border-color: #DFDEDE
+    }
+
+    .obj1 {
+        display: grid;
+        align-self: center;
+        justify-content: center;
+        grid-gap: 50px;
+        }
+    .obj2 {
+        display: grid;
+        align-self: start;
+    }
+
+    .link {
+        color: black
+    }
+</style>
+{% endwith%}
+    <h2>Active Listings</h2><br>
+<div class="lst_whole">
+{% if listings %}
+    {% for l in listings %}
+        <div class="lst">
+            {% if l.image %}
+                <div class="obj1">
+                    <a href="{% url 'listing' l.title %}"><img src="{{ MEDIA_URL }}{{ l.image }}" alt="No Image" style="max-width: 100%; max-height: 700px" /></a>
+                </div>
+            {% else %}
+                <div class="obj1">
+                    <h3>No Image</h3>
+                </div>
+            {% endif %}
+            {% if l is not l.image %}
+                <div class="obj2">
+                    <br><h3><a class="link" href="{% url 'listing' l.title %}">{{ l.title }}</a></h3>
+                    <br><h4><a class="link" href="{% url 'listing' l.title %}">Price: ${{ l.ebid }}.00</a></h4>
+                    <br><a class="link" href="{% url 'listing' l.title %}">{{ l.description }}</a>
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+{% else %}
+    <br><br><br>
+{% endif %}
+</div>
+<br><h2>Passive Listings</h2><br>
+<div class="lst_whole">
+{% if pas_lst %}
+        {% for e in pas_lst %}
+            <div class="lst">
+                {% if e.image %}
+                    <div class="obj1">
+                        <a href="{% url 'passive_listing' e.title %}"><img src="{{ MEDIA_URL }}{{ e.image }}" style="max-width: 100%; max-height: 700px"/></a>
+                    </div>
+                {% else %}
+                    <div class="obj1">
+                        <h3>No Image</h3>
+                    </div>
+                {% endif %}
+                {% if e is not e.image %}
+                    <div class="obj2">
+                        <br><br><h3><a class="link" href="{% url 'passive_listing' e.title %}">{{ e.title }}</a></h3>
+                        <br><h4><a class="link" href="{% url 'passive_listing' e.title %}">Price: ${{ e.ebid }}.00</a></h4>
+                        <br><a class="link" href="{% url 'passive_listing' e.title %}">{{ e.description }}</a>
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+{% endif %}
+</div>
+{% endblock %}

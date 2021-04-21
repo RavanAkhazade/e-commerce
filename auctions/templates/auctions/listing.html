@@ -1,0 +1,56 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    {% if lst_by.author == request.user%}
+        <form method="post" action="{% url 'listing' lst.title %}">
+            {% csrf_token %}
+            <input class="btn btn-primary" name="winning" type="submit" value="Close the auction"><br>
+        </form><br>
+    {% endif %}
+
+    <h2>Listing: {{ lst.title }}</h2><br>
+
+    <form method="get">
+        <input style="background-color: #a3a3c2" type="submit" class="btn" value="Watchlist" name="wl">
+    </form><br>
+
+    {% if lst.image %}
+        <img src="{{ MEDIA_URL }}{{ lst.image }}" style="max-width: 100%; max-height: 700px"/><br>
+    {% endif %}
+    <br><h6>{{ lst.description }}</h6><br>
+    {% if bid %}
+        <h4>${{ bid }}.00</h4>
+    {% else %}
+        <h4>${{ lst_bid }}.00</h4>
+    {% endif %}
+    <br>{{ bids_amount }} bid(s) so far. Your bid is the current bid.
+    {% if err %}
+        <br>{{ err }}
+    {% endif %}
+
+    <form method="post" action="{% url 'listing' lst.title %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input class="btn btn-primary" name="placing" type="submit" value="Place Bid">
+    </form><br>
+
+    <h3>Details</h3>
+        <ul>
+            <li>Listed by: {{ lst_by.author }}</li>
+            <li>Category: {% if lst.category %} <a href="{% url 'category_listing' lst.category %}">{{ lst.category }}</a> {% else %} No Category Listed {% endif %} </li>
+        </ul>
+    {% if comments %}
+    <h2>Comments</h2>
+        {% for c in comments %}
+            User: {{ c.user }}
+            <br>Comment: {{ c }}<br>
+        {% endfor %}
+    {% endif %}
+
+    <form method="post" action="{% url 'listing' lst.title %}">
+        {% csrf_token %}
+        {{ form2.as_p }}
+        <input class="btn btn-primary" name ='commenting' type="submit" value="Comment">
+    </form>
+
+{% endblock %}
