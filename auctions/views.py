@@ -73,12 +73,6 @@ def register(request):
                 "message": "Username already taken."
             })
         login(request, user)
-        for lst in Listing.objects.all():
-            if not Cart.objects.filter(author_id=request.user.id, listing2_id=lst.id):
-                Cart.objects.create(author_id=request.user.id, listing2_id=lst.id)
-                wl_lst = Cart.objects.get(author_id=request.user.id, listing2_id=lst.id).listing2
-                wl_lst.inlist = False
-                wl_lst.save()
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
